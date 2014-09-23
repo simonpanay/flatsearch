@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block head_title %}{% trans "Page not found" %}{% endblock %}
+
+{% block content %}
+    <div class="jumbotron">
+        <h1>{% trans "Page could not be found."%}</h1>
+        <p>{% trans "We're sorry, but the requested page could not be found." %}</p>
+    </div>
+{% endblock %}
