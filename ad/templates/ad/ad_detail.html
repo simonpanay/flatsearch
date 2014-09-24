@@ -6,10 +6,31 @@
 {% block head_title %}{% trans "lbc_list" %}{% endblock %}
 
 {% block content %}
-    <p>
-        {% trans 'Price : ' %}{{ price }}
-    </p>
-    {% for image in images %}
-        <img src="{{ image }}" class="img-responsive img-rounded"><br>
-    {% endfor %}
+    <div class="row">
+        <div class="col-sm-4">
+            <ul class="list-group">
+                <li class="list-group-item"><strong>{% trans 'Description : ' %}</strong>
+                    {% for line in ad.description %}
+                        {{ line }}<br>
+                    {% endfor %}
+                </li>
+                <li class="list-group-item"><strong>{% trans 'Price : ' %}</strong>{{ ad.price }} €</li>
+                <li class="list-group-item"><strong>{% trans 'Town : ' %}</strong>{{ ad.town }}</li>
+                <li class="list-group-item"><strong>{% trans 'Zip-Code : ' %}</strong>{{ ad.zip_code }}</li>
+                <li class="list-group-item"><strong>{% trans 'Charges incl. : ' %}</strong>{{ ad.charges_incl }}</li>
+                <li class="list-group-item"><strong>{% trans 'Type : ' %}</strong>{{ ad.type }}</li>
+                <li class="list-group-item"><strong>{% trans 'Rooms : ' %}</strong>{{ ad.rooms }}</li>
+                <li class="list-group-item"><strong>{% trans 'Furnished : ' %}</strong>{{ ad.furnished }}</li>
+                <li class="list-group-item"><strong>{% trans 'Area : ' %}</strong>{{ ad.area }}</li>
+                <li class="list-group-item"><strong>{% trans 'Ref : ' %}</strong>{{ ad.ref }}</li>
+                <li class="list-group-item"><strong>{% trans 'GES : ' %}</strong>{{ ad.ges }}</li>
+                <li class="list-group-item"><strong>{% trans 'Energy Class : ' %}</strong>{{ ad.energy_class }}</li>
+            </ul>
+        </div>
+        <div class="col-sm-8">
+            {% for image in ad.images %}
+                <img src="{{ image }}" class="img-responsive img-rounded"><br>
+            {% endfor %}
+        </div>
+    </div>
 {% endblock %}
