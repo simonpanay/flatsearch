@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+{% load url from future %}
+
+{% block head_title %}{% trans "lbc_list" %}{% endblock %}
+
+{% block content %}
+    <p>
+        {% trans 'Price : ' %}{{ price }}
+    </p>
+    {% for image in images %}
+        <img src="{{ image }}" class="img-responsive img-rounded"><br>
+    {% endfor %}
+{% endblock %}

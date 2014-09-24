@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+{% load url from future %}
+
+{% block head_title %}{% trans "lbc_list" %}{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="list-group">
+            {% for ad in ads_list %}
+                <a href="{% url 'ad:ad-detail' ad %}" class="list-group-item">{{ ad }}</ad>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
