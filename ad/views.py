@@ -1,3 +1,4 @@
+import collections
 import os
 import requests
 
@@ -27,16 +28,19 @@ def ads_list(request):
         'roe': '3',  # max rooms
         'ret': '1',  # house
         'ret': '2',  # appartment
-        'furn': '2',  # furnished 1 yes 2 no
+        #'furn': '2',  # furnished 1 yes 2 no
         'location': '38400',  # zip code
     }
     search_url = os.path.join(LBC_URL, CATEGORY, OFFER, REGION, DEPARTMENT)
     page = requests.get(search_url, params=payload)
     tree = html.fromstring(page.text)
     ads_list = tree.xpath('//div[@class="list-lbc"]//a/@href')
-    ads = [ad.split('locations/')[1].split('.htm?')[0] for ad in ads_list]
+    ads_title = tree.xpath('//div[@class="list-lbc"]//div[@class="title"]/text()')
+    ads = {ad.split('locations/')[1].split('.htm?')[0]: title.strip() for ad, title in zip(ads_list, ads_title)}
+    sorted_ads = collections.OrderedDict(sorted(ads.items(), reverse=True))
+
     return render_to_response('ad/ad_list.html',
-                              {'ads_list': ads},
+                              {'ads_list': sorted_ads},
                               context_instance=RequestContext(request))
 
 
@@ -65,7 +69,13 @@ def ad_detail(request, pk):
         energy_class = energy[0][0].split()[0]
     else:
         energy_class = None
+    furnished = tree.xpath('//*[child::*[contains(text(), "Meublé / Non meublé :")]]/td/text()'),
+    if furnished[0]:
+        furn = furnished[0]
+    else:
+        furn = None
     ad = {
+        'title': tree.xpath('//h2[@id="ad_subject"]/text()')[0],
         'description': tree.xpath('//div[@class="AdviewContent"]//div[@class="content"]/text()'),
         'town': tree.xpath('//*[child::*[contains(text(), "Ville :")]]/td/text()')[0],
         'zip_code': int(tree.xpath('//*[child::*[contains(text(), "Code postal :")]]/td/text()')[0]),
@@ -74,7 +84,7 @@ def ad_detail(request, pk):
         'rooms': int(tree.xpath('//*[child::*[contains(text(), "Pièces :")]]/td/text()')[0]),
         'charges_included': charges_included,
         'type': tree.xpath('//*[child::*[contains(text(), "Type de bien :")]]/td/text()')[0],
-        'furnished': tree.xpath('//*[child::*[contains(text(), "Meublé / Non meublé :")]]/td/text()')[0],
+        'furnished': furn,
         'area': tree.xpath('//*[child::*[contains(text(), "Surface :")]]/td/text()')[0].split()[0],
         'ref': ref,
         'ges': ges,
