@@ -7,6 +7,12 @@
 
 {% block content %}
     <div class="container">
+        <p>
+            <a href="{% url 'ad:ad-list-update' %}" class="btn btn-primary" role="button">
+                <span class="fa fa-refresh"></span> {% trans 'Refresh' %}
+            </a>
+        </p>
+
         <div class="list-group">
             {% for ad in object_list %}
                 {% if ad.reviewed %}

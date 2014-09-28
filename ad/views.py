@@ -8,21 +8,19 @@ from .models import FlatAd
 class FlatAdListView(ListView):
     model = FlatAd
 
-    def dispatch(self, request, *args, **kwargs):
-        FlatAd.objects.import_last_ads()
-        return super(FlatAdListView, self).dispatch(request, *args, **kwargs)
-
 class FlatAdDetailView(DetailView):
     model = FlatAd
 
 def review(request, pk):
     ad = get_object_or_404(FlatAd, pk=pk)
     ad.review()
-
     return redirect('ad:ad-list')
 
 def unreview(request, pk):
     ad = get_object_or_404(FlatAd, pk=pk)
     ad.unreview()
+    return redirect('ad:ad-list')
 
+def update_ads(request):
+    FlatAd.objects.import_last_ads()
     return redirect('ad:ad-list')
