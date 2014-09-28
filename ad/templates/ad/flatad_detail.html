@@ -10,23 +10,25 @@
         <div class="col-sm-4">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <h4>{{ object.title }}<h2>
+                    <h4>{{ object.title }}</h4><br>
+                    <p>{{ object.zip_code }} - {{ object.get_city_display }} - <a href="{{ object.url }}">{{ object.pk }}</a></p>
                 </div>
                 <div class="panel-body">
                     {{ object.description }}
                 </div>
                 <ul class="list-group">
-                    <li class="list-group-item"><strong>{% trans 'Ad URL : ' %}</strong><a href="{{ object.url }}">{{ object.pk }}</a></li>
                     <li class="list-group-item"><strong>{% trans 'Price : ' %}</strong>{{ object.price }} €</li>
-                    <li class="list-group-item"><strong>{% trans 'Town : ' %}</strong>{{ object.get_city_display }}</li>
-                    <li class="list-group-item"><strong>{% trans 'Zip-Code : ' %}</strong>{{ object.zip_code }}</li>
                     <li class="list-group-item"><strong>{% trans 'Charges incl. : ' %}</strong>{{ object.charges_included }}</li>
+                    <li class="list-group-item"><strong>{% trans 'GES : ' %}</strong>
+                        {% include 'ad/flatad_letter.html' with letter=object.ges %}
+                    </li>
+                    <li class="list-group-item"><strong>{% trans 'Energy Class : ' %}</strong>
+                        {% include 'ad/flatad_letter.html' with letter=object.energy_class %}
+                    </li>
                     <li class="list-group-item"><strong>{% trans 'Type : ' %}</strong>{{ object.get_flat_type_display }}</li>
                     <li class="list-group-item"><strong>{% trans 'Rooms : ' %}</strong>{{ object.rooms }}</li>
                     <li class="list-group-item"><strong>{% trans 'Furnished : ' %}</strong>{{ object.furnished }}</li>
                     <li class="list-group-item"><strong>{% trans 'Area : ' %}</strong>{{ object.area }}</li>
-                    <li class="list-group-item"><strong>{% trans 'GES : ' %}</strong>{{ object.ges }}</li>
-                    <li class="list-group-item"><strong>{% trans 'Energy Class : ' %}</strong>{{ object.energy_class }}</li>
                 </ul>
             </div>
             {% if object.reviewed %}
