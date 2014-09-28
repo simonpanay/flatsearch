@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+{% load url from future %}
+
+{% block head_title %}{% trans "lbc_list" %}{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-sm-4">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4>{{ object.title }}<h2>
+                </div>
+                <div class="panel-body">
+                    {{ object.description }}
+                </div>
+                <ul class="list-group">
+                    <li class="list-group-item"><strong>{% trans 'Ad URL : ' %}</strong><a href="{{ object.url }}">{{ object.pk }}</a></li>
+                    <li class="list-group-item"><strong>{% trans 'Price : ' %}</strong>{{ object.price }} €</li>
+                    <li class="list-group-item"><strong>{% trans 'Town : ' %}</strong>{{ object.get_city_display }}</li>
+                    <li class="list-group-item"><strong>{% trans 'Zip-Code : ' %}</strong>{{ object.zip_code }}</li>
+                    <li class="list-group-item"><strong>{% trans 'Charges incl. : ' %}</strong>{{ object.charges_included }}</li>
+                    <li class="list-group-item"><strong>{% trans 'Type : ' %}</strong>{{ object.get_flat_type_display }}</li>
+                    <li class="list-group-item"><strong>{% trans 'Rooms : ' %}</strong>{{ object.rooms }}</li>
+                    <li class="list-group-item"><strong>{% trans 'Furnished : ' %}</strong>{{ object.furnished }}</li>
+                    <li class="list-group-item"><strong>{% trans 'Area : ' %}</strong>{{ object.area }}</li>
+                    <li class="list-group-item"><strong>{% trans 'GES : ' %}</strong>{{ object.ges }}</li>
+                    <li class="list-group-item"><strong>{% trans 'Energy Class : ' %}</strong>{{ object.energy_class }}</li>
+                </ul>
+            </div>
+            {% if object.reviewed %}
+                <a href="{% url 'ad:ad-unreview' object.pk %}" class="btn btn-primary" role="button">{% trans "Mark as unreviewed" %}</a>
+            {% else %}
+                <a href="{% url 'ad:ad-review' object.pk %}" class="btn btn-primary" role="button">{% trans "Mark as reviewed" %}</a>
+            {% endif %}
+        </div>
+        <div class="col-sm-8">
+            {% for image in object.images %}
+                <img src="{{ image }}" class="img-responsive img-rounded"><br>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

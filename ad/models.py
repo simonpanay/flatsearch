@@ -2,6 +2,7 @@ import collections
 import os
 import requests
 
+from django.core.urlresolvers import reverse
 from django.db import models
 
 from .references import City, FlatType, GES, Energy
@@ -155,3 +156,17 @@ class FlatAd(models.Model):
 
     def __str__(self):
         return '{} - {}'.format(self.pk, self.title)
+
+    def get_absolute_url(self):
+        return reverse('ad:ad-detail', kwargs={'pk': self.pk})
+
+    def url(self):
+        return os.path.join(LBC_URL, CATEGORY, str(self.pk) + ".htm")
+
+    def review(self):
+        self.reviewed = True
+        self.save()
+
+    def unreview(self):
+        self.reviewed = False
+        self.save()
