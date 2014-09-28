@@ -71,7 +71,7 @@ def ad_detail(request, pk):
         energy_class = None
     furnished = tree.xpath('//*[child::*[contains(text(), "Meublé / Non meublé :")]]/td/text()'),
     if furnished[0]:
-        furn = furnished[0]
+        furn = furnished[0][0]
     else:
         furn = None
     ad = {
