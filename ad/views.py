@@ -17,18 +17,18 @@ OFFER = "offres"
 # Create your views here.
 def ads_list(request):
     payload = {
-        'f': 'a',
-        'th': '1',
-        'mrs': '300',
-        'mre': '600',
-        'sqs': '3',
-        'sqe': '6',
-        'ros': '2',
-        'roe': '3',
-        'ret': '1',
-        'ret': '2',
-        'furn': '2',
-        'location': '38400',
+        'f': 'a',  # 
+        'th': '1',  # 
+        'mrs': '300',  # min price
+        'mre': '600',  # max price
+        'sqs': '3',  # min surface 
+        'sqe': '6',  # max surface
+        'ros': '2',  # min rooms
+        'roe': '3',  # max rooms
+        'ret': '1',  # house
+        'ret': '2',  # appartment
+        'furn': '2',  # furnished 1 yes 2 no
+        'location': '38400',  # zip code
     }
     search_url = os.path.join(LBC_URL, CATEGORY, OFFER, REGION, DEPARTMENT)
     page = requests.get(search_url, params=payload)
