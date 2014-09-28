@@ -21,15 +21,15 @@ class FlatType(object):
 
 
 class GES(object):
-    A = 'a'
-    B = 'b'
-    C = 'c'
-    D = 'd'
-    E = 'e'
-    F = 'f'
-    G = 'g'
-    H = 'h'
-    I = 'i'
+    A = 'A'
+    B = 'B'
+    C = 'C'
+    D = 'D'
+    E = 'E'
+    F = 'F'
+    G = 'G'
+    H = 'H'
+    I = 'I'
 
     CHOICES = (
         (A, _('<5')),
@@ -45,15 +45,15 @@ class GES(object):
 
 
 class Energy(object):
-    A = 'a'
-    B = 'b'
-    C = 'c'
-    D = 'd'
-    E = 'e'
-    F = 'f'
-    G = 'g'
-    H = 'h'
-    I = 'i'
+    A = 'A'
+    B = 'B'
+    C = 'C'
+    D = 'D'
+    E = 'E'
+    F = 'F'
+    G = 'G'
+    H = 'H'
+    I = 'I'
 
     CHOICES = (
         (A, _('<50')),

@@ -15,7 +15,6 @@ DEPARTMENT = "isere"
 OFFER = "offres"
 
 
-# Create your views here.
 def ads_list(request):
     payload = {
         'f': 'a',  # 
