@@ -154,8 +154,13 @@ class FlatAd(models.Model):
     reviewed = models.BooleanField(default=False)
     objects = FlatAdManager()
 
+    class Meta:
+        ordering = ['-pk']
+
     def __str__(self):
-        return '{} - {}'.format(self.pk, self.title)
+        return '{} - {} - {}'.format(self.pk,
+                                     self.get_city_display(),
+                                     self.title)
 
     def get_absolute_url(self):
         return reverse('ad:ad-detail', kwargs={'pk': self.pk})
