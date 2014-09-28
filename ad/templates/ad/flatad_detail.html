@@ -36,8 +36,8 @@
             {% endif %}
         </div>
         <div class="col-sm-8">
-            {% for image in object.images %}
-                <img src="{{ image }}" class="img-responsive img-rounded"><br>
+            {% for image in object.flatimage_set.all %}
+                <img src="{{ image.url }}" class="img-responsive img-rounded"><br>
             {% endfor %}
         </div>
     </div>

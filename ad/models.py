@@ -120,13 +120,13 @@ class FlatAdManager(models.Manager):
         furnished = self.get_furnished(tree.xpath('//*[child::*[contains(text(), "Meublé / Non meublé :")]]/td/text()'))
         city = self.get_city(tree.xpath('//*[child::*[contains(text(), "Ville :")]]/td/text()'))
         flat_type = self.get_flat_type(tree.xpath('//*[child::*[contains(text(), "Type de bien :")]]/td/text()'))
+        images = [thumb.split("url('")[1].split("');")[0].replace('thumbs', 'images') for thumb in tree.xpath('//div[@id="thumbs_carousel"]//span/@style')],
         new_ad = self.create(
             pk = ad,
             title = tree.xpath('//h2[@id="ad_subject"]/text()')[0],
             description = tree.xpath('//div[@class="AdviewContent"]//div[@class="content"]/text()'),
             zip_code = int(tree.xpath('//*[child::*[contains(text(), "Code postal :")]]/td/text()')[0]),
             price = tree.xpath('//span[@class="price"]/text()')[0].split()[0],
-            #images = [thumb.split("url('")[1].split("');")[0].replace('thumbs', 'images') for thumb in tree.xpath('//div[@id="thumbs_carousel"]//span/@style')],
             rooms = int(tree.xpath('//*[child::*[contains(text(), "Pièces :")]]/td/text()')[0]),
             charges_included = charges,
             flat_type = flat_type,
@@ -136,6 +136,8 @@ class FlatAdManager(models.Manager):
             energy_class = energy_class,
             city = city,
         )
+        for image in images[0]:
+            new_ad.flatimage_set.create(url=image)
 
 
 class FlatAd(models.Model):
@@ -175,3 +177,8 @@ class FlatAd(models.Model):
     def unreview(self):
         self.reviewed = False
         self.save()
+
+
+class FlatImage(models.Model):
+    ad = models.ForeignKey(FlatAd)
+    url = models.URLField(max_length=255)
