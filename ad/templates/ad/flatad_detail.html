@@ -17,7 +17,7 @@
                     {{ object.description|safe }}
                 </div>
                 <ul class="list-group">
-                    <li class="list-group-item"><strong>{% trans 'Price : ' %}</strong>{{ object.price }} €</li>
+                    <li class="list-group-item"><strong>{% trans 'Price : ' %}</strong>{{ object.price }} € - {{ object.price_per_square_meter }} €/m²</li>
                     <li class="list-group-item"><strong>{% trans 'Charges incl. : ' %}</strong>{{ object.charges_included }}</li>
                     <li class="list-group-item"><strong>{% trans 'GES : ' %}</strong>
                         {% include 'ad/flatad_letter.html' with letter=object.ges %}

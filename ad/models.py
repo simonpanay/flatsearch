@@ -182,6 +182,9 @@ class FlatAd(models.Model):
         self.reviewed = False
         self.save()
 
+    def price_per_square_meter(self):
+        return round(self.price / self.area, 1)
+
 
 class FlatImage(models.Model):
     ad = models.ForeignKey(FlatAd)
