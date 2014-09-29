@@ -64,7 +64,7 @@ class FlatAdManager(models.Manager):
 
     def get_city(self, raw_city):
         try:
-            city = raw_city[0][0]
+            city = raw_city[0]
         except:
             city = ''
         else:
@@ -119,25 +119,27 @@ class FlatAdManager(models.Manager):
                 new_ad.flatimage_set.create(url=image)
 
     def import_last_ads(self):
-        payload = {
-            'f': 'a',  # 
-            'th': '1',  # 
-            'mrs': '300',  # min price
-            'mre': '600',  # max price
-            'sqs': '3',  # min surface 
-            'sqe': '6',  # max surface
-            'ros': '2',  # min rooms
-            'roe': '3',  # max rooms
-            'ret': '1',  # house
-            'ret': '2',  # appartment
-            #'furn': '2',  # furnished 1 yes 2 no
-            'location': '38400',  # zip code
-        }
-        search_url = os.path.join(LBC_URL, CATEGORY, OFFER, REGION, DEPARTMENT)
-        page = requests.get(search_url, params=payload)
-        tree = html.fromstring(page.text)
-        ads_list = tree.xpath('//div[@class="list-lbc"]//a/@href')
-        ads = [ad.split('locations/')[1].split('.htm?')[0] for ad in ads_list]
+        ads = []
+        for zip_code in ['38000', '38100', '38400']:
+            payload = {
+                'f': 'a',  # 
+                'th': '1',  # 
+                'mrs': '300',  # min price
+                'mre': '600',  # max price
+                'sqs': '3',  # min surface 
+                'sqe': '6',  # max surface
+                'ros': '2',  # min rooms
+                'roe': '3',  # max rooms
+                'ret': '1',  # house
+                'ret': '2',  # appartment
+                #'furn': '2',  # furnished 1 yes 2 no
+                'location': zip_code,  # zip code
+            }
+            search_url = os.path.join(LBC_URL, CATEGORY, OFFER, REGION, DEPARTMENT)
+            page = requests.get(search_url, params=payload)
+            tree = html.fromstring(page.text)
+            ads_list = tree.xpath('//div[@class="list-lbc"]//a/@href')
+            ads = ads + [ad.split('locations/')[1].split('.htm?')[0] for ad in ads_list]
         for ad in ads:
             self.create_ad(ad)
 
