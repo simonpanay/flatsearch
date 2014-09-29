@@ -14,7 +14,7 @@
                     <p>{{ object.zip_code }} - {{ object.get_city_display }} - <a href="{{ object.url }}">{{ object.pk }}</a></p>
                 </div>
                 <div class="panel-body">
-                    {{ object.description }}
+                    {{ object.description|safe }}
                 </div>
                 <ul class="list-group">
                     <li class="list-group-item"><strong>{% trans 'Price : ' %}</strong>{{ object.price }} €</li>
