@@ -3,6 +3,8 @@ from django.conf.urls import patterns, url
 from .views import FlatAdDetailView
 from .views import FlatAdListView
 from .views import review
+from .views import interesting
+from .views import notinteresting
 from .views import unreview
 from .views import update_ads
 
@@ -16,4 +18,6 @@ urlpatterns = patterns('',
     url(r'^(?P<pk>\d+)/$', FlatAdDetailView.as_view(), name='ad-detail'),
     url(r'^(?P<pk>\d+)/review$', review, name='ad-review'),
     url(r'^(?P<pk>\d+)/unreview$', unreview, name='ad-unreview'),
+    url(r'^(?P<pk>\d+)/interesting$', interesting, name='ad-interesting'),
+    url(r'^(?P<pk>\d+)/notinteresting$', notinteresting, name='ad-notinteresting'),
 )

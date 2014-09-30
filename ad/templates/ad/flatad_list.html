@@ -16,7 +16,11 @@
         <div class="list-group">
             {% for ad in object_list %}
                 {% if ad.reviewed %}
-                    <a href="{% url 'ad:ad-detail' ad.pk %}" class="list-group-item">{{ ad }}</a>
+                    {% if ad.interesting == True %}
+                        <a href="{% url 'ad:ad-detail' ad.pk %}" class="list-group-item list-group-item-success">{{ ad }}</a>
+                    {% else %}
+                        <a href="{% url 'ad:ad-detail' ad.pk %}" class="list-group-item">{{ ad }}</a>
+                    {% endif %}
                 {% else %}
                     <a href="{% url 'ad:ad-detail' ad.pk %}" class="list-group-item active">{{ ad }}</a>
                 {% endif %}

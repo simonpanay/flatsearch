@@ -125,7 +125,7 @@ class FlatAdManager(models.Manager):
                 'f': 'a',  # 
                 'th': '1',  # 
                 'mrs': '300',  # min price
-                'mre': '600',  # max price
+                'mre': '700',  # max price
                 'sqs': '3',  # min surface 
                 'sqe': '6',  # max surface
                 'ros': '2',  # min rooms
@@ -158,10 +158,11 @@ class FlatAd(models.Model):
     ges = models.CharField(max_length=1, choices=GES.CHOICES, blank=True)
     energy_class = models.CharField(max_length=1, choices=Energy.CHOICES, blank=True)
     reviewed = models.BooleanField(default=False)
+    interesting = models.BooleanField(default=False)
     objects = FlatAdManager()
 
     class Meta:
-        ordering = ['-pk']
+        ordering = ['-interesting', '-pk']
 
     def __str__(self):
         return '{} - {} - {}'.format(self.pk,
@@ -176,6 +177,15 @@ class FlatAd(models.Model):
 
     def review(self):
         self.reviewed = True
+        self.save()
+
+    def mark_interesting(self):
+        self.interesting = True
+        self.reviewed = True
+        self.save()
+
+    def mark_notinteresting(self):
+        self.interesting = False
         self.save()
 
     def unreview(self):

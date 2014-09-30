@@ -21,6 +21,16 @@ def unreview(request, pk):
     ad.unreview()
     return redirect('ad:ad-list')
 
+def interesting(request, pk):
+    ad = get_object_or_404(FlatAd, pk=pk)
+    ad.mark_interesting()
+    return redirect('ad:ad-list')
+
+def notinteresting(request, pk):
+    ad = get_object_or_404(FlatAd, pk=pk)
+    ad.mark_notinteresting()
+    return redirect('ad:ad-list')
+
 def update_ads(request):
     FlatAd.objects.import_last_ads()
     return redirect('ad:ad-list')
