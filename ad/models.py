@@ -199,3 +199,17 @@ class FlatAd(models.Model):
 class FlatImage(models.Model):
     ad = models.ForeignKey(FlatAd)
     url = models.URLField(max_length=255)
+
+
+class Street(models.Model):
+    ad = models.ForeignKey(FlatAd, unique=True)
+    street = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.street
+
+    def get_absolute_url(self):
+        return reverse('ad:ad-detail', kwargs={'pk': self.ad.pk})
+
+    def map_link(self):
+        return " ".join(["https://www.google.fr/maps/preview?q=", self.street, self.ad.get_city_display()])

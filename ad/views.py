@@ -1,15 +1,33 @@
+from django.core.urlresolvers import reverse_lazy
+
 from django.shortcuts import get_object_or_404
 from django.shortcuts import redirect
 from django.views.generic import DetailView
 from django.views.generic import ListView
+from django.views.generic.edit import CreateView, UpdateView
 
-from .models import FlatAd
+from .forms import StreetForm
+from .models import FlatAd, Street
 
 class FlatAdListView(ListView):
     model = FlatAd
 
 class FlatAdDetailView(DetailView):
     model = FlatAd
+
+class AddressCreateView(CreateView):
+    model = Street
+    exclude = ['ad']
+    form_class = StreetForm
+
+    def form_valid(self, form):
+        form.instance.ad = get_object_or_404(FlatAd, pk=self.kwargs['pk'])
+        return super(AddressCreateView, self).form_valid(form)
+
+class AddressUpdateView(UpdateView):
+    model = Street
+    exclude = ['ad']
+    form_class = StreetForm
 
 def review(request, pk):
     ad = get_object_or_404(FlatAd, pk=pk)
