@@ -67,11 +67,6 @@ class FlatAdManager(models.Manager):
             city = raw_city[0]
         except:
             city = ''
-        else:
-            if city == 'Grenoble':
-                city = 'gr'
-            else:
-                city = 'sm'
         return city
 
     def get_flat_type(self, raw_flat_type):
@@ -147,7 +142,7 @@ class FlatAdManager(models.Manager):
 class FlatAd(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField()
-    city = models.CharField(max_length=2, choices=City.CHOICES)
+    city = models.CharField(max_length=255)
     zip_code = models.PositiveIntegerField()
     price = models.PositiveIntegerField()
     rooms = models.PositiveIntegerField()
@@ -166,7 +161,7 @@ class FlatAd(models.Model):
 
     def __str__(self):
         return '{} - {} - {}'.format(self.pk,
-                                     self.get_city_display(),
+                                     self.city,
                                      self.title)
 
     def get_absolute_url(self):
@@ -212,4 +207,4 @@ class Street(models.Model):
         return reverse('ad:ad-detail', kwargs={'pk': self.ad.pk})
 
     def map_link(self):
-        return " ".join(["https://www.google.fr/maps/preview?q=", self.street, self.ad.get_city_display()])
+        return " ".join(["https://www.google.fr/maps/preview?q=", self.street, self.ad.city])

@@ -12,9 +12,9 @@
                 <div class="panel-heading">
                     <h4>{{ object.title }}</h4><br>
                     {% if object.street_set.all.exists %}
-                        <p><a href="{{ object.street_set.first.map_link }}">{{ object.street_set.first }} - {{ object.zip_code }} {{ object.get_city_display }}</a></p>
+                        <p><a href="{{ object.street_set.first.map_link }}">{{ object.street_set.first }} - {{ object.zip_code }} {{ object.city }}</a></p>
                     {% else %}
-                        <p>{{ object.zip_code }} {{ object.get_city_display }}</p>
+                        <p>{{ object.zip_code }} {{ object.city }}</p>
                     {% endif %}
                 </div>
                 <div class="panel-body">
