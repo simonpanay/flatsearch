@@ -157,7 +157,7 @@ class FlatAd(models.Model):
     objects = FlatAdManager()
 
     class Meta:
-        ordering = ['-interesting', '-pk']
+        ordering = ['-interesting', 'reviewed', '-pk']
 
     def __str__(self):
         return '{} - {} - {}'.format(self.pk,

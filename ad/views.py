@@ -11,6 +11,7 @@ from .models import FlatAd, Street
 
 class FlatAdListView(ListView):
     model = FlatAd
+    paginate_by = 20
 
 class FlatAdDetailView(DetailView):
     model = FlatAd
