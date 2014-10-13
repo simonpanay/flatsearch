@@ -122,7 +122,7 @@ class FlatAdManager(models.Manager):
                 'mrs': '300',  # min price
                 'mre': '700',  # max price
                 'sqs': '3',  # min surface 
-                'sqe': '6',  # max surface
+                'sqe': '7',  # max surface
                 'ros': '2',  # min rooms
                 'roe': '3',  # max rooms
                 'ret': '1',  # house

@@ -38,11 +38,12 @@
             </div>
             {% if object.reviewed %}
                 <a href="{% url 'ad:ad-unreview' object.pk %}" class="btn btn-primary" role="button">{% trans "Mark as unreviewed" %}</a>
-            {% else %}
-                <a href="{% url 'ad:ad-review' object.pk %}" class="btn btn-danger" role="button">{% trans "Mark as reviewed" %}</a>
                 {% if object.interesting %}
                     <a href="{% url 'ad:ad-notinteresting' object.pk %}" class="btn btn-warning" role="button">{% trans "Finaly, no way!" %}</a>
-                {% else %}
+                {% endif %}
+            {% else %}
+                <a href="{% url 'ad:ad-review' object.pk %}" class="btn btn-danger" role="button">{% trans "Mark as reviewed" %}</a>
+                {% if not object.interesting %}
                     <a href="{% url 'ad:ad-interesting' object.pk %}" class="btn btn-success" role="button">{% trans "Hum, interesting !" %}</a>
                 {% endif %}
             {% endif %}
