@@ -134,6 +134,7 @@ class FlatAdManager(models.Manager):
             page = requests.get(search_url, params=payload)
             tree = html.fromstring(page.text)
             ads_list = tree.xpath('//div[@class="list-lbc"]//a/@href')
+            ads_list.pop()
             ads = ads + [ad.split('locations/')[1].split('.htm?')[0] for ad in ads_list]
         for ad in ads:
             self.create_ad(ad)
