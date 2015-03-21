@@ -1,8 +1,14 @@
 <div class="row">
-    <div class="col-sm-8">
+    <div class="col-sm-7">
         {{ ad }}
     </div>
-    <div class="col-sm-4">
+    <div class="col-sm-3">
         {% include 'ad/flatad_letter.html' with letter=ad.energy_class %}
+    </div>
+    <div class="col-sm-1">
+        {{ ad.price }}
+    </div>
+    <div class="col-sm-1">
+        {{ ad.price_per_square_meter }}
     </div>
 </div>
