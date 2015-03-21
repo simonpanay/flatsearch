@@ -11,7 +11,7 @@ from .models import FlatAd, Street
 
 class FlatAdListView(ListView):
     model = FlatAd
-    paginate_by = 20
+    paginate_by = 15
 
 class FlatAdDetailView(DetailView):
     model = FlatAd
@@ -33,7 +33,8 @@ class AddressUpdateView(UpdateView):
 def review(request, pk):
     ad = get_object_or_404(FlatAd, pk=pk)
     ad.review()
-    return redirect('ad:ad-list')
+    next_ad = FlatAd.objects.filter(reviewed=False).last().pk
+    return redirect('ad:ad-detail', pk=next_ad)
 
 def unreview(request, pk):
     ad = get_object_or_404(FlatAd, pk=pk)
@@ -43,7 +44,8 @@ def unreview(request, pk):
 def interesting(request, pk):
     ad = get_object_or_404(FlatAd, pk=pk)
     ad.mark_interesting()
-    return redirect('ad:ad-list')
+    next_ad = FlatAd.objects.filter(reviewed=False).last().pk
+    return redirect('ad:ad-detail', pk=next_ad)
 
 def notinteresting(request, pk):
     ad = get_object_or_404(FlatAd, pk=pk)
