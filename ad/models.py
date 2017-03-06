@@ -86,18 +86,29 @@ class FlatAdManager(models.Manager):
             detail_url = os.path.join(LBC_URL, CATEGORY, str(ad) + ".htm")
             page = requests.get(detail_url)
             tree = html.fromstring(page.text)
-            charges = self.get_charges(tree.xpath('//*[child::*[contains(text(), "Charges comprises :")]]/td/text()'))
-            ges = self.get_ges(tree.xpath('//*[child::*[contains(text(), "GES :")]]/td/noscript/a/text()'))
-            energy_class = self.get_energy(tree.xpath('//*[child::*[contains(text(), "Classe énergie :")]]/td/noscript/a/text()'))
-            furnished = self.get_furnished(tree.xpath('//*[child::*[contains(text(), "Meublé / Non meublé :")]]/td/text()'))
-            city = self.get_city(tree.xpath('//*[child::*[contains(text(), "Ville :")]]/td/text()'))
-            flat_type = self.get_flat_type(tree.xpath('//*[child::*[contains(text(), "Type de bien :")]]/td/text()'))
-            images = [thumb.split("url('")[1].split("');")[0].replace('thumbs', 'images') for thumb in tree.xpath('//div[@id="thumbs_carousel"]//span/@style')],
-            description = tree.xpath('//div[@class="AdviewContent"]//div[@class="content"]/text()')
-            description = "<br>".join([line for line in description])
+
+            info = dict()
+            info['title'] = tree.xpath('//h1[@class="no-border"]/text()')[0].strip()
+            info['price'] = tree.xpath('//h2[@class="item_price"]')
+            ##info['ges'] = tree.xpath('//span[@class="property"]/text()')
+            print(info.items())
+
+
+
+
+            #charges = self.get_charges(tree.xpath('//*[child::*[contains(text(), "Charges comprises :")]]/td/text()'))
+            #ges = self.get_ges(tree.xpath('//*[child::*[contains(text(), "GES :")]]/td/noscript/a/text()'))
+            #energy_class = self.get_energy(tree.xpath('//*[child::*[contains(text(), "Classe énergie :")]]/td/noscript/a/text()'))
+            #furnished = self.get_furnished(tree.xpath('//*[child::*[contains(text(), "Meublé / Non meublé :")]]/td/text()'))
+            #city = self.get_city(tree.xpath('//*[child::*[contains(text(), "Ville :")]]/td/text()'))
+            #flat_type = self.get_flat_type(tree.xpath('//*[child::*[contains(text(), "Type de bien :")]]/td/text()'))
+            #images = [thumb.split("url('")[1].split("');")[0].replace('thumbs', 'images') for thumb in tree.xpath('//div[@id="thumbs_carousel"]//span/@style')],
+            #description = tree.xpath('//div[@class="AdviewContent"]//div[@class="content"]/text()')
+            #description = "<br>".join([line for line in description])
+            #address = tree.xpath('//span[@itemprop="address"]')[0]
             new_ad = self.create(
                 pk = ad,
-                title = tree.xpath('//h2[@id="ad_subject"]/text()')[0],
+                title = tree.xpath('//h1[@class="no-border"]/text()')[0],
                 description = description,
                 zip_code = int(tree.xpath('//*[child::*[contains(text(), "Code postal :")]]/td/text()')[0]),
                 price = tree.xpath('//span[@class="price"]/text()')[0].split()[0],
@@ -133,9 +144,8 @@ class FlatAdManager(models.Manager):
             search_url = os.path.join(LBC_URL, CATEGORY, OFFER, REGION, DEPARTMENT)
             page = requests.get(search_url, params=payload)
             tree = html.fromstring(page.text)
-            ads_list = tree.xpath('//div[@class="list-lbc"]//a/@href')
-            ads_list.pop()
-            ads = ads + [ad.split('locations/')[1].split('.htm?')[0] for ad in ads_list]
+            ads_list = tree.xpath('/html/body/section/main/section/section/section/section/ul/li/a')
+            ads = ads + [ad.items()[0][1].split('locations/')[1].split('.htm?')[0] for ad in ads_list]
         for ad in ads:
             self.create_ad(ad)
 
