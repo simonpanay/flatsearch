@@ -16,7 +16,7 @@ urlpatterns = patterns('',
     # url(r'^blog/', include('blog.urls')),
 
     url(r'^$', FlatAdListView.as_view(), name='ad-list'),
-    url(r'/update$', update_ads, name='ad-list-update'),
+    url(r'update$', update_ads, name='ad-list-update'),
     url(r'^(?P<pk>\d+)/$', FlatAdDetailView.as_view(), name='ad-detail'),
     url(r'^(?P<pk>\d+)/address$', AddressCreateView.as_view(), name='ad-create-address'),
     url(r'^updateaddress/(?P<pk>\d+)$', AddressUpdateView.as_view(), name='ad-update-address'),

@@ -1,6 +1,5 @@
-Django==1.7
-#django-crispy-forms==1.4.0
-git+git://github.com/maraujop/django-crispy-forms.git@dev#egg=django-crispy-forms
+Django==1.8
+django-crispy-forms==1.5.2
 django-extensions==1.4.0
 lxml==3.4.0
 requests==2.4.1
