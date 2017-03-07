@@ -65,9 +65,9 @@ class FlatAdManager(models.Manager):
             city = ''
         else:
             if city == 'grenoble':
-                city = 'g'
+                city = 'Grenoble'
             else:
-                city = 'sm'
+                city = "Saint-Martin-d'Hères"
         return city
 
     def get_flat_type(self, raw_flat_type):
@@ -91,9 +91,7 @@ class FlatAdManager(models.Manager):
             raw_data = tree.xpath('//body/script[@type="text/javascript"]/text()')[0].strip().split('{')[1].strip("\n").split(',')
             data_lines = [option.strip().split(" : ") for option in raw_data]
             data_lines.pop()
-            info = dict()
-            for line in data_lines:
-                info[line[0]] = line[1].strip("\"")
+            info = {line[0]: line[1].strip('"') for line in data_lines}
 
             try:
                 raw_images = tree.xpath('//section[@class="adview_main"]/script/text()')[1].strip().split(';')
@@ -124,31 +122,6 @@ class FlatAdManager(models.Manager):
                 city = city,
             )
 
-            #charges = self.get_charges(tree.xpath('//*[child::*[contains(text(), "Charges comprises :")]]/td/text()'))
-            #ges = self.get_ges(tree.xpath('//*[child::*[contains(text(), "GES :")]]/td/noscript/a/text()'))
-            #energy_class = self.get_energy(tree.xpath('//*[child::*[contains(text(), "Classe énergie :")]]/td/noscript/a/text()'))
-            #furnished = self.get_furnished(tree.xpath('//*[child::*[contains(text(), "Meublé / Non meublé :")]]/td/text()'))
-            #city = self.get_city(tree.xpath('//*[child::*[contains(text(), "Ville :")]]/td/text()'))
-            #flat_type = self.get_flat_type(tree.xpath('//*[child::*[contains(text(), "Type de bien :")]]/td/text()'))
-            #images = [thumb.split("url('")[1].split("');")[0].replace('thumbs', 'images') for thumb in tree.xpath('//div[@id="thumbs_carousel"]//span/@style')],
-            #description = tree.xpath('//div[@class="AdviewContent"]//div[@class="content"]/text()')
-            #description = "<br>".join([line for line in description])
-            #address = tree.xpath('//span[@itemprop="address"]')[0]
-            #new_ad = self.create(
-            #    pk = ad,
-            #    title = tree.xpath('//h1[@class="no-border"]/text()')[0],
-            #    description = description,
-            #    zip_code = int(tree.xpath('//*[child::*[contains(text(), "Code postal :")]]/td/text()')[0]),
-            #    price = tree.xpath('//span[@class="price"]/text()')[0].split()[0],
-            #    rooms = int(tree.xpath('//*[child::*[contains(text(), "Pièces :")]]/td/text()')[0]),
-            #    charges_included = charges,
-            #    flat_type = flat_type,
-            #    furnished = furnished,
-            #    area = tree.xpath('//*[child::*[contains(text(), "Surface :")]]/td/text()')[0].split()[0],
-            #    ges = ges,
-            #    energy_class = energy_class,
-            #    city = city,
-            #)
             for image in images:
                 new_ad.flatimage_set.create(url=image)
 
