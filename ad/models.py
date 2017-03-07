@@ -92,7 +92,7 @@ class FlatAdManager(models.Manager):
 
             try:
                 raw_images = tree.xpath('//section[@class="adview_main"]/script/text()')[1].strip().split(';')
-                images = ["http://" + image.strip().split('//')[1].split('"')[0] for image in raw_images if image.strip().startswith('images[')]
+                images = ["".join(["http://", image.strip().split('//')[1].split('"')[0]]) for image in raw_images if image.strip().startswith('images[')]
             except:
                 images = []
 
