@@ -12,14 +12,14 @@
                 <div class="panel-heading">
                     <h4>{{ object.title }}</h4><br>
                     {% if object.street_set.all.exists %}
-                        <p><a href="{{ object.street_set.first.map_link }}">{{ object.street_set.first }} - {{ object.zip_code }} {{ object.city }}</a></p>
+                        <p><a href="{{ object.street_set.first.map_link }}" target='_blank'>{{ object.street_set.first }} - {{ object.zip_code }} {{ object.city }}</a></p>
                     {% else %}
                         <p>{{ object.zip_code }} {{ object.city }}</p>
                     {% endif %}
                 </div>
                 <div class="panel-body">
                     {{ object.description|safe }}<br>
-                    <a href="{{ object.url }}">{{ object.pk }}</a>
+                    <a href="{{ object.url }}" target='_blank'>{{ object.pk }}</a>
                 </div>
                 <ul class="list-group">
                     <li class="list-group-item"><strong>{% trans 'Price : ' %}</strong>{{ object.price }} € - {{ object.price_per_square_meter }} €/m²</li>
