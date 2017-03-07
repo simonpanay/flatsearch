@@ -58,11 +58,16 @@ class FlatAdManager(models.Manager):
                 furnished = None
         return furnished
 
-    def get_city(self, raw_city):
+    def get_city(self, raw_info):
         try:
-            city = raw_city[0]
+            city = raw_info['city']
         except:
             city = ''
+        else:
+            if city == 'grenoble':
+                city = 'g'
+            else:
+                city = 'sm'
         return city
 
     def get_flat_type(self, raw_flat_type):
@@ -100,6 +105,7 @@ class FlatAdManager(models.Manager):
             nrj = self.get_nrj(info)
             furnished = self.get_furnished(info)
             description = "".join(["".join([line, "<br/><br/>"]) for line in tree.xpath('//div[@class="line properties_description"]/p[@id="description" or @itemprop="description"]/text()')])
+            city = self.get_city(info)
 
             new_ad = self.create(
                 pk = ad,
@@ -115,7 +121,7 @@ class FlatAdManager(models.Manager):
                 area = int(info['surface']),
                 ges = ges,
                 energy_class = nrj,
-                city = info['city'],
+                city = city,
             )
 
             #charges = self.get_charges(tree.xpath('//*[child::*[contains(text(), "Charges comprises :")]]/td/text()'))
