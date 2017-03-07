@@ -99,11 +99,12 @@ class FlatAdManager(models.Manager):
             ges = self.get_ges(info)
             nrj = self.get_nrj(info)
             furnished = self.get_furnished(info)
+            description = "".join(["".join([line, "<br/><br/>"]) for line in tree.xpath('//div[@class="line properties_description"]/p[@id="description" or @itemprop="description"]/text()')])
 
             new_ad = self.create(
                 pk = ad,
-                title = info['titre'],
-                description = '',
+                title = info['titre'].replace('_', ' ').capitalize(),
+                description = description,
                 zip_code = int(info['cp']),
                 price = int(info['loyer']),
                 rooms = int(info['pieces']),
