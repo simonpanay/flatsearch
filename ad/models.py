@@ -209,7 +209,7 @@ class FlatImage(models.Model):
 
 
 class Street(models.Model):
-    ad = models.ForeignKey(FlatAd, unique=True)
+    ad = models.OneToOneField(FlatAd)
     street = models.CharField(max_length=255)
 
     def __str__(self):
