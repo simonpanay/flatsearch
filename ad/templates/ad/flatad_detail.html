@@ -11,8 +11,8 @@
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h4>{{ object.title }}</h4><br>
-                    {% if object.street_set.all.exists %}
-                        <p><a href="{{ object.street_set.first.map_link }}" target='_blank'>{{ object.street_set.first }} - {{ object.zip_code }} {{ object.city }}</a></p>
+                    {% if object.street %}
+                        <p><a href="{{ object.street.map_link }}" target='_blank'>{{ object.street }} - {{ object.zip_code }} {{ object.city }}</a></p>
                     {% else %}
                         <p>{{ object.zip_code }} {{ object.city }}</p>
                     {% endif %}
@@ -47,10 +47,10 @@
                     <a href="{% url 'ad:ad-interesting' object.pk %}" class="btn btn-success" role="button">{% trans "Hum, interesting !" %}</a>
                 {% endif %}
             {% endif %}
-            {% if not object.street_set.all.exists %}
+            {% if not object.street %}
                 <a href="{% url 'ad:ad-create-address' object.pk %}" class="btn btn-default" role="button">{% trans "Address" %}</a>
             {% else %}
-                <a href="{% url 'ad:ad-update-address' object.street_set.first.pk %}" class="btn btn-default" role="button">{% trans "Address" %}</a>
+                <a href="{% url 'ad:ad-update-address' object.street.pk %}" class="btn btn-default" role="button">{% trans "Address" %}</a>
             {% endif %}
         </div>
         <div class="col-sm-8">
