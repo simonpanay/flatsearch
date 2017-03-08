@@ -133,10 +133,10 @@ class FlatAdManager(models.Manager):
                 'th': '1',  # 
                 'mrs': '300',  # min price
                 'mre': '700',  # max price
-                'sqs': '3',  # min surface 
-                'sqe': '7',  # max surface
-                'ros': '2',  # min rooms
-                'roe': '3',  # max rooms
+                'sqs': '5',  # min surface 
+                'sqe': '8',  # max surface
+                'ros': '1',  # min rooms
+                'roe': '2',  # max rooms
                 'ret': '1',  # house
                 'ret': '2',  # appartment
                 #'furn': '2',  # furnished 1 yes 2 no
