@@ -11,6 +11,7 @@
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h4>{{ object.title }}</h4><br>
+                    <p>{{ object.last_updated|date:"l d F" }}</p>
                     {% if object.street %}
                         <p><a href="{{ object.street.map_link }}" target='_blank'>{{ object.street }} - {{ object.zip_code }} {{ object.city }}</a></p>
                     {% else %}

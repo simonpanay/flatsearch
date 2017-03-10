@@ -33,8 +33,11 @@ class AddressUpdateView(UpdateView):
 def review(request, pk):
     ad = get_object_or_404(FlatAd, pk=pk)
     ad.review()
-    next_ad = FlatAd.objects.filter(reviewed=False).last().pk
-    return redirect('ad:ad-detail', pk=next_ad)
+    try:
+        next_ad = FlatAd.objects.filter(reviewed=False).last().pk
+        return redirect('ad:ad-detail', pk=next_ad)
+    except:
+        return redirect('ad:ad-list')
 
 def unreview(request, pk):
     ad = get_object_or_404(FlatAd, pk=pk)
@@ -44,8 +47,11 @@ def unreview(request, pk):
 def interesting(request, pk):
     ad = get_object_or_404(FlatAd, pk=pk)
     ad.mark_interesting()
-    next_ad = FlatAd.objects.filter(reviewed=False).last().pk
-    return redirect('ad:ad-detail', pk=next_ad)
+    try:
+        next_ad = FlatAd.objects.filter(reviewed=False).last().pk
+        return redirect('ad:ad-detail', pk=next_ad)
+    except:
+        return redirect('ad:ad-list')
 
 def notinteresting(request, pk):
     ad = get_object_or_404(FlatAd, pk=pk)

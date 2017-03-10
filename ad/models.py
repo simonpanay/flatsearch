@@ -1,4 +1,5 @@
 import collections
+import datetime
 import os
 import requests
 
@@ -84,7 +85,6 @@ class FlatAdManager(models.Manager):
 
     def create_ad(self, ad):
         if not self.filter(pk=ad).exists():
-            print("début")
             detail_url = os.path.join(LBC_URL, CATEGORY, str(ad) + ".htm")
             page = requests.get(detail_url)
             tree = html.fromstring(page.text)
@@ -106,6 +106,11 @@ class FlatAdManager(models.Manager):
             description = "".join(["".join([line, "<br/><br/>"]) for line in tree.xpath('//div[@class="line properties_description"]/p[@id="description" or @itemprop="description"]/text()')])
             charges = tree.xpath('//h2[@class="item_price clearfix"]/span/span/text()')
             city = self.get_city(info)
+            date = info['publish_date'].split('/')
+            published = datetime.date(int(date[2]), int(date[1]), int(date[0]))
+            date = info['last_update_date'].split('/')
+            last_updated = datetime.date(int(date[2]), int(date[1]), int(date[0]))
+
 
             new_ad = self.create(
                 pk = ad,
@@ -114,7 +119,6 @@ class FlatAdManager(models.Manager):
                 zip_code = int(info['cp']),
                 price = int(info['loyer']),
                 rooms = int(info['pieces']),
-                #charges_included = charges,
                 charges_included = self.get_charges(charges),
                 flat_type = info['type'],
                 furnished = furnished,
@@ -122,8 +126,9 @@ class FlatAdManager(models.Manager):
                 ges = ges,
                 energy_class = nrj,
                 city = city,
+                published = published,
+                last_updated = last_updated,
             )
-            print('fin')
 
             for image in images:
                 new_ad.flatimage_set.create(url=image)
@@ -142,7 +147,7 @@ class FlatAdManager(models.Manager):
                 'roe': '2',  # max rooms
                 'ret': '1',  # house
                 'ret': '2',  # appartment
-                #'furn': '2',  # furnished 1 yes 2 no
+                'furn': '2',  # furnished 1 yes 2 no
                 'location': zip_code,  # zip code
             }
             search_url = os.path.join(LBC_URL, CATEGORY, OFFER, REGION, DEPARTMENT)
@@ -169,6 +174,8 @@ class FlatAd(models.Model):
     energy_class = models.CharField(max_length=1, choices=Energy.CHOICES, blank=True)
     reviewed = models.BooleanField(default=False)
     interesting = models.BooleanField(default=False)
+    published = models.DateField()
+    last_updated = models.DateField()
     objects = FlatAdManager()
 
     class Meta:
