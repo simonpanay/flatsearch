@@ -20,11 +20,11 @@ OFFER = "offres"
 class FlatAdManager(models.Manager):
     def get_charges(self, raw_charges):
         try:
-            charges = raw_charges[0]
+            charges = raw_charges[0].strip()
         except:
             charges_included = None
         else:
-            if charges == 'Oui':
+            if charges == 'Charges comprises':
                 charges_included = True
             else:
                 charges_included = False
@@ -84,6 +84,7 @@ class FlatAdManager(models.Manager):
 
     def create_ad(self, ad):
         if not self.filter(pk=ad).exists():
+            print("début")
             detail_url = os.path.join(LBC_URL, CATEGORY, str(ad) + ".htm")
             page = requests.get(detail_url)
             tree = html.fromstring(page.text)
@@ -103,6 +104,7 @@ class FlatAdManager(models.Manager):
             nrj = self.get_nrj(info)
             furnished = self.get_furnished(info)
             description = "".join(["".join([line, "<br/><br/>"]) for line in tree.xpath('//div[@class="line properties_description"]/p[@id="description" or @itemprop="description"]/text()')])
+            charges = tree.xpath('//h2[@class="item_price clearfix"]/span/span/text()')
             city = self.get_city(info)
 
             new_ad = self.create(
@@ -113,7 +115,7 @@ class FlatAdManager(models.Manager):
                 price = int(info['loyer']),
                 rooms = int(info['pieces']),
                 #charges_included = charges,
-                charges_included = '',
+                charges_included = self.get_charges(charges),
                 flat_type = info['type'],
                 furnished = furnished,
                 area = int(info['surface']),
@@ -121,6 +123,7 @@ class FlatAdManager(models.Manager):
                 energy_class = nrj,
                 city = city,
             )
+            print('fin')
 
             for image in images:
                 new_ad.flatimage_set.create(url=image)
