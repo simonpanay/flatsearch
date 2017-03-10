@@ -1,4 +1,4 @@
-from django.conf.urls import patterns, url
+from django.conf.urls import url
 
 from .views import FlatAdDetailView
 from .views import FlatAdListView
@@ -10,11 +10,7 @@ from .views import update_ads
 from .views import AddressCreateView
 from .views import AddressUpdateView
 
-urlpatterns = patterns('',
-    # Examples:
-    # url(r'^$', 'flatsearch.views.home', name='home'),
-    # url(r'^blog/', include('blog.urls')),
-
+urlpatterns = [
     url(r'^$', FlatAdListView.as_view(), name='ad-list'),
     url(r'update$', update_ads, name='ad-list-update'),
     url(r'^(?P<pk>\d+)/$', FlatAdDetailView.as_view(), name='ad-detail'),
@@ -24,4 +20,4 @@ urlpatterns = patterns('',
     url(r'^(?P<pk>\d+)/unreview$', unreview, name='ad-unreview'),
     url(r'^(?P<pk>\d+)/interesting$', interesting, name='ad-interesting'),
     url(r'^(?P<pk>\d+)/notinteresting$', notinteresting, name='ad-notinteresting'),
-)
+]
