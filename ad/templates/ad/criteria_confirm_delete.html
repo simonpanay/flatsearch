@@ -1,0 +1,15 @@
+
+{% extends "base.html" %}
+
+{% load i18n %}
+
+{% block head_title %}{% trans "lbc_list" %}{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <form action="" method="post">{% csrf_token %}
+            <p>Are you sure you want to delete "{{ object.search_tag }}"?</p>
+            <input type="submit" value="Confirm" />
+        </form>
+    </div>
+{% endblock %}

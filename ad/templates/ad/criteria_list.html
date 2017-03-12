@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+
+{% block head_title %}{% trans "lbc_list" %}{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <p>
+            <a href="{% url 'ad:user-criteria-create' %}" class="btn btn-primary" role="button">{% trans "Add a criteria" %}</a>
+        </p>
+
+        <div class="list-group">
+            {% for criteria in object_list %}
+                <a href="{% url 'ad:user-criteria-update' criteria.pk %}" class="list-group-item">
+                    {{ criteria.pk }} - {{criteria.get_category_display}} - {{ criteria.search_tag }}
+                    <div class="row">
+                        <div class="col-sm-2">
+                            Price
+                        </div>
+                        <div class="col-sm-4">
+                            {{ criteria.min_price }}€ - {{ criteria.max_price }}€
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-2">
+                            Area
+                        </div>
+                        <div class="col-sm-4">
+                            {{ criteria.get_min_area_display }} - {{ criteria.get_max_area_display }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-2">
+                            Rooms
+                        </div>
+                        <div class="col-sm-4">
+                            {{ criteria.min_room }} - {{ criteria.max_room }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-2">
+                            {% if criteria.house %} House {% endif %} - {% if criteria.appartment %} Appartment {% endif %}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-2">
+                            {{ criteria.get_furnished_display }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-2">
+                            Zip Codes
+                        </div>
+                        <div class="col-sm-4">
+                            {{ criteria.locations }}
+                        </div>
+                    </div>
+                </a>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

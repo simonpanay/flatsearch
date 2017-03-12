@@ -1,13 +1,38 @@
 from django.core.urlresolvers import reverse_lazy
 
+from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
 from django.shortcuts import redirect
 from django.views.generic import DetailView
 from django.views.generic import ListView
-from django.views.generic.edit import CreateView, UpdateView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
-from .forms import StreetForm
-from .models import FlatAd, Street
+from .forms import StreetForm, CriteriaForm
+from .models import FlatAd, Street, Criteria
+
+class UserCriteriaListView(ListView):
+    model = Criteria
+
+    def get_queryset(self, *args, **kwargs):
+        return Criteria.objects.filter(user=self.request.user)
+
+class UserCriteriaCreateView(CreateView):
+    model = Criteria
+    exclude = ['user']
+    form_class = CriteriaForm
+
+    def form_valid(self, form):
+        form.instance.user = get_object_or_404(User, pk=self.request.user.pk)
+        return super(UserCriteriaCreateView, self).form_valid(form)
+
+class UserCriteriaUpdateView(UpdateView):
+    model = Criteria
+    exclude = ['user']
+    form_class = CriteriaForm
+
+class UserCriteriaDeleteView(DeleteView):
+    model = Criteria
+    success_url = reverse_lazy('ad:user-criteria-list')
 
 class FlatAdListView(ListView):
     model = FlatAd

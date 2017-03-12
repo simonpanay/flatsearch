@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+{% load crispy_forms_tags %}
+
+{% block head_title %}{% trans "criteria" %}{% endblock %}
+
+{% block content %}
+    {% crispy form form.helper %}
+
+    {% if object %}
+        <p>
+            <a href="{% url 'ad:user-criteria-delete' object.pk %}" class="btn btn-danger" role="button">{% trans "Delete criteria" %}</a>
+        </p>
+    {% endif %}
+{% endblock %}

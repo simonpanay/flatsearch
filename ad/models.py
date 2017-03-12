@@ -1,8 +1,8 @@
-import collections
 import datetime
 import os
 import requests
 
+from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.db import models
 
@@ -16,6 +16,53 @@ CATEGORY = "locations"
 REGION = "rhone_alpes"
 DEPARTMENT = "isere"
 OFFER = "offres"
+
+
+class Criteria(models.Model):
+    AREA_CHOICES = (
+        (0, '0 m²'),
+        (1, '20 m²'),
+        (2, '25 m²'),
+        (3, '30 m²'),
+        (4, '35 m²'),
+        (5, '40 m²'),
+        (6, '50 m²'),
+        (7, '60 m²'),
+        (8, '70 m²'),
+        (9, '80 m²'),
+        (10, '90 m²'),
+        (11, '100 m²'),
+    )
+
+    FURNISHED_CHOICES = (
+        (1, 'Meublé'),
+        (2, 'Non Meublé'),
+    )
+
+    CATEGORY_CHOICES = (
+        ('locations', 'Locations'),
+        ('ventes_immobilieres', 'Ventes'),
+    )
+
+    user = models.ForeignKey(User)
+    search_tag = models.CharField(max_length=255, blank=True, null=True)
+    min_price = models.PositiveIntegerField()
+    max_price = models.PositiveIntegerField()
+    min_area = models.PositiveIntegerField(choices=AREA_CHOICES)
+    max_area = models.PositiveIntegerField(choices=AREA_CHOICES)
+    min_room = models.PositiveIntegerField()
+    max_room = models.PositiveIntegerField()
+    house = models.BooleanField(default=True)
+    appartment = models.BooleanField(default=True)
+    furnished = models.PositiveIntegerField(choices=FURNISHED_CHOICES)
+    locations = models.CharField(max_length=255)
+    category = models.CharField(max_length=255, choices=CATEGORY_CHOICES)
+
+    def __str__(self):
+        return "".join([self.user, self.pk])
+
+    def get_absolute_url(self):
+        return reverse('ad:user-criteria-list')
 
 
 class FlatAdManager(models.Manager):
@@ -135,26 +182,24 @@ class FlatAdManager(models.Manager):
 
     def import_last_ads(self):
         ads = []
-        for zip_code in ['38000', '38100', '38400']:
-            payload = {
-                'f': 'a',  # 
-                'th': '1',  # 
-                'mrs': '300',  # min price
-                'mre': '700',  # max price
-                'sqs': '5',  # min surface 
-                'sqe': '8',  # max surface
-                'ros': '1',  # min rooms
-                'roe': '2',  # max rooms
-                'ret': '1',  # house
-                'ret': '2',  # appartment
-                'furn': '2',  # furnished 1 yes 2 no
-                'location': zip_code,  # zip code
-            }
-            search_url = os.path.join(LBC_URL, CATEGORY, OFFER, REGION, DEPARTMENT)
-            page = requests.get(search_url, params=payload)
-            tree = html.fromstring(page.text)
-            ads_list = tree.xpath('/html/body/section/main/section/section/section/section/ul/li/a')
-            ads = ads + [ad.items()[0][1].split('locations/')[1].split('.htm?')[0] for ad in ads_list]
+        #for zip_code in ['38000', '38100', '38400']:
+        payload = {
+            'mrs': '300',  # min price
+            'mre': '700',  # max price
+            'sqs': '5',  # min surface 
+            'sqe': '8',  # max surface
+            'ros': '1',  # min rooms
+            'roe': '2',  # max rooms
+            'ret': '1',  # house
+            'ret': '2',  # appartment
+            'furn': '2',  # furnished 1 yes 2 no
+            'location': '38000 38100 38400',  # zip code
+        }
+        search_url = os.path.join(LBC_URL, CATEGORY, OFFER, REGION, DEPARTMENT)
+        page = requests.get(search_url, params=payload)
+        tree = html.fromstring(page.text)
+        ads_list = tree.xpath('/html/body/section/main/section/section/section/section/ul/li/a')
+        ads = ads + [ad.items()[0][1].split('locations/')[1].split('.htm?')[0] for ad in ads_list]
         for ad in ads:
             self.create_ad(ad)
 
