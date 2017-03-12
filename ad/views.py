@@ -84,5 +84,5 @@ def notinteresting(request, pk):
     return redirect('ad:ad-list')
 
 def update_ads(request):
-    FlatAd.objects.import_last_ads()
+    FlatAd.objects.import_last_ads(request.user)
     return redirect('ad:ad-list')

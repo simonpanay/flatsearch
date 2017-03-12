@@ -8,8 +8,8 @@
 {% block content %}
     <div class="container">
         <form action="" method="post">{% csrf_token %}
-            <p>Are you sure you want to delete "{{ object.search_tag }}"?</p>
-            <input type="submit" value="Confirm" />
+            <p>Are you sure you want to delete "{{ object.pk }} - {{ object.search_tag }}"?</p>
+            <button type="submit" class="btn btn-primary">Confirm</button>
         </form>
     </div>
 {% endblock %}

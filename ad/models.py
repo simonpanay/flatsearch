@@ -59,7 +59,7 @@ class Criteria(models.Model):
     category = models.CharField(max_length=255, choices=CATEGORY_CHOICES)
 
     def __str__(self):
-        return "".join([self.user, self.pk])
+        return "".join([self.user.username, str(self.pk)])
 
     def get_absolute_url(self):
         return reverse('ad:user-criteria-list')
@@ -180,26 +180,28 @@ class FlatAdManager(models.Manager):
             for image in images:
                 new_ad.flatimage_set.create(url=image)
 
-    def import_last_ads(self):
+    def import_last_ads(self, user):
         ads = []
-        #for zip_code in ['38000', '38100', '38400']:
-        payload = {
-            'mrs': '300',  # min price
-            'mre': '700',  # max price
-            'sqs': '5',  # min surface 
-            'sqe': '8',  # max surface
-            'ros': '1',  # min rooms
-            'roe': '2',  # max rooms
-            'ret': '1',  # house
-            'ret': '2',  # appartment
-            'furn': '2',  # furnished 1 yes 2 no
-            'location': '38000 38100 38400',  # zip code
-        }
-        search_url = os.path.join(LBC_URL, CATEGORY, OFFER, REGION, DEPARTMENT)
-        page = requests.get(search_url, params=payload)
-        tree = html.fromstring(page.text)
-        ads_list = tree.xpath('/html/body/section/main/section/section/section/section/ul/li/a')
-        ads = ads + [ad.items()[0][1].split('locations/')[1].split('.htm?')[0] for ad in ads_list]
+        for criteria in user.criteria_set.all():
+            payload = {
+                'q': criteria.search_tag,
+                'mrs': criteria.min_price,
+                'mre': criteria.max_price,
+                'sqs': criteria.min_area,
+                'sqe': criteria.max_area,
+                'ros': criteria.min_room,
+                'roe': criteria.max_room,
+                'ret': '1' if criteria.house else '0',
+                'ret': '2' if criteria.appartment else '0',
+                'furn': criteria.furnished,
+                'location': criteria.locations,
+            }
+            search_url = os.path.join(LBC_URL, criteria.category, OFFER, REGION, DEPARTMENT)
+            print(search_url)
+            page = requests.get(search_url, params=payload)
+            tree = html.fromstring(page.text)
+            ads_list = tree.xpath('/html/body/section/main/section/section/section/section/ul/li/a')
+            ads = ads + [ad.items()[0][1].split('locations/')[1].split('.htm?')[0] for ad in ads_list]
         for ad in ads:
             self.create_ad(ad)
 
