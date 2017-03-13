@@ -197,7 +197,6 @@ class FlatAdManager(models.Manager):
                 'location': criteria.locations,
             }
             search_url = os.path.join(LBC_URL, criteria.category, OFFER, REGION, DEPARTMENT)
-            print(search_url)
             page = requests.get(search_url, params=payload)
             tree = html.fromstring(page.text)
             ads_list = tree.xpath('/html/body/section/main/section/section/section/section/ul/li/a')
