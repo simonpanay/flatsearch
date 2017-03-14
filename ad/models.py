@@ -184,7 +184,9 @@ class FlatAdManager(models.Manager):
         ads = []
         for criteria in user.criteria_set.all():
             payload = {
+                'th':'1',
                 'q': criteria.search_tag,
+                'parrot': '0',
                 'mrs': criteria.min_price,
                 'mre': criteria.max_price,
                 'sqs': criteria.min_area,
