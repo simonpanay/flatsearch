@@ -1,6 +1,8 @@
-Django==1.10
-django-crispy-forms
-django-extensions
-lxml
-requests
-werkzeug
+Django==1.11
+django-crispy-forms==1.6.1
+django-extensions==1.7.8
+lxml==3.7.3
+pytz==2017.2
+requests==2.13.0
+six==1.10.0
+Werkzeug==0.12.1
